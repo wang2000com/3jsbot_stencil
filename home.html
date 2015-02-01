@@ -57,6 +57,7 @@
 
 <script>
 
+var yCoordinate = 0;
 //////////////////////////////////////////////////
 /////     MAIN FUNCTION CALLS
 //////////////////////////////////////////////////
@@ -182,12 +183,17 @@ function my_animate() {
     // CS148: INITIAL GETTING FAMILIAR CODE  (START HERE)
 
     // keyboard is threejs helper for reading keyboard state
-    if (keyboard.pressed("x")) 
+    if (keyboard.pressed("x")) {
         textbar.innerHTML = "moving up";  // make the pieces move up
-    else if (keyboard.pressed("z")) 
+        yCoordinate = yCoordinate + 0.1;
+    }
+        
+    else if (keyboard.pressed("z")) {
         textbar.innerHTML = "zzzzzz";  // stop jittering the pieces
+        return;
+    }
     else {
-        // make the pieces jitter, and say something interesting
+        textbar.innerHTML = "Moving again!";
     }
 
     // jsmat will be used to transform a 3D object to a specific location in the world
@@ -211,7 +217,7 @@ function my_animate() {
     for (x in robot.joints) {
 
         // jsmat[1][3] corresponds to the y-coordinate of the position for the 3D object
-        jsmat[1][3] = 2+Math.random()*0.02;  // Math object has lots of helpful functions
+        jsmat[1][3] = 2+Math.random()*0.02 + yCoordinate;  // Math object has lots of helpful functions
 
         // jsmat[2][3] corresponds to the z-coordinate of the position for the 3D object
         jsmat[2][3] = Math.random()*0.02;
@@ -228,7 +234,7 @@ function my_animate() {
     // iterate over each link of the robot independently
     jsmat[0][3] = -Object.keys(robot.joints).length*spacing/2;
     for (x in robot.links) {
-        jsmat[1][3] = 1+Math.random()*0.02;
+        jsmat[1][3] = 1+Math.random()*0.02 + yCoordinate;
         jsmat[2][3] = Math.random()*0.02;
         threemat = matrix_2Darray_to_threejs(jsmat);
         simpleApplyMatrix(robot.links[x].geom,threemat);
